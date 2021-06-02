@@ -67,7 +67,7 @@ const TransferOwnership = ({ assetId, card }) => {
       );
       console.log(res);
       toast({
-        title: `Congratulations, You now own ${card.asset.name}!`,
+        title: `Nice! You've requested a trade for ${card.asset.name}!`,
         description: "You'll receive a text with more information shortly",
         status: "success",
         duration: 3000,
