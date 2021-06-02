@@ -29,7 +29,7 @@ const ClaimOwnershipForm = ({ assetId, card }) => {
     const addedConsentData = { ...data, consent: "yes" };
     try {
       console.log(data);
-      const res = await axios.patch(
+      await axios.patch(
         `https://openscreen.ngrok.io/asset/${assetId}/owner`,
         addedConsentData
       );

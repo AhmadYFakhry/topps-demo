@@ -65,6 +65,7 @@ const TransferOwnership = ({ assetId, card }) => {
         `https://openscreen.ngrok.io/asset/${assetId}/owner`,
         addedConsentData
       );
+      console.log(res);
       toast({
         title: `Congratulations, You now own ${card.asset.name}!`,
         description: "You'll receive a text with more information shortly",
@@ -73,6 +74,7 @@ const TransferOwnership = ({ assetId, card }) => {
         isClosable: true,
       });
     } catch (error) {
+      console.log(error);
       toast({
         title: "Request failed",
         description: error,
@@ -254,17 +256,16 @@ const TransferOwnership = ({ assetId, card }) => {
               placeholder="Postal Code or Zip"
             />
           </InputGroup>
+          <Button
+            isLoading={loading}
+            disabled={!errors}
+            type="submit"
+            color="gray.800"
+          >
+            Request Transfer of Ownership
+          </Button>
         </Stack>
       </form>
-
-      <Button
-        isLoading={loading}
-        disabled={!errors}
-        type="submit"
-        color="gray.800"
-      >
-        Request Transfer of Ownership
-      </Button>
     </Stack>
   );
 };
