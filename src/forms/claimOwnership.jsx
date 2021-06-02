@@ -65,7 +65,7 @@ const ClaimOwnershipForm = (props) => {
         <Box margin="auto">
           <Image
             padding="10px"
-            src={props.card?.asset.customAttributes.imageUrl}
+            src={props.card?.asset.customAttributes?.imageUrl}
           />
 
           {!props.card ? (

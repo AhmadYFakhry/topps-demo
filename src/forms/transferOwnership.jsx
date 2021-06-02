@@ -8,6 +8,7 @@ import {
   Heading,
   Button,
   Spinner,
+  Image,
   Flex,
   useToast,
   OrderedList,
@@ -138,6 +139,10 @@ const TransferOwnership = (props) => {
               <Text marginLeft="10px" marginBottom="10px" color="white">
                 {props.card?.asset.description}
               </Text>
+              <Image
+                padding="10px"
+                src={props.card?.asset.customAttributes?.imageUrl}
+              />
               <Accordion maxW="500px" color="white" allowToggle>
                 <AccordionItem>
                   <h2>
