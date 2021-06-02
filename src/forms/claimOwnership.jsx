@@ -6,6 +6,8 @@ import {
   Input,
   InputGroup,
   Text,
+  Image,
+  Flex,
   Box,
   Spinner,
   useToast,
@@ -52,19 +54,27 @@ const ClaimOwnershipForm = (props) => {
     <Stack spacing={4}>
       <Box
         border="2px"
+        padding="10px"
         borderColor="white"
         borderRadius="5px"
         marginBottom="20px"
       >
-        <Heading color="white">Card Info</Heading>
-        <Box margin="10px">
+        <Heading padding="10px" color="white">
+          Card Info
+        </Heading>
+        <Box margin="auto">
+          <Image
+            padding="10px"
+            src={props.card?.asset.customAttributes.imageUrl}
+          />
+
           {!props.card ? (
             <Spinner color="white" />
           ) : (
-            <>
+            <Box padding="10px">
               <Text color="white">{props.card?.asset.name}</Text>
               <Text color="white">{props.card?.asset.description}</Text>
-            </>
+            </Box>
           )}
         </Box>
       </Box>
@@ -72,36 +82,29 @@ const ClaimOwnershipForm = (props) => {
 
       <form onSubmit={handleSubmit(onClaim)}>
         <Stack spacing={4}>
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("firstName", { required: true })}
-              placeholder="First Name"
-            />
-          </InputGroup>
+          <Flex>
+            <InputGroup marginRight="10px">
+              <Input
+                bgColor="white"
+                {...register("firstName", { required: true })}
+                placeholder="First Name"
+              />
+            </InputGroup>
 
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("lastName", { required: true })}
-              placeholder="Last Name"
-            />
-          </InputGroup>
+            <InputGroup>
+              <Input
+                bgColor="white"
+                {...register("lastName", { required: true })}
+                placeholder="Last Name"
+              />
+            </InputGroup>
+          </Flex>
 
           <InputGroup>
             <Input
               bgColor="white"
               {...register("phoneNumber", { required: true })}
               placeholder="Mobile Number"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("pin", { required: true })}
-              type="password"
-              placeholder="Pin"
             />
           </InputGroup>
 
@@ -156,15 +159,6 @@ const ClaimOwnershipForm = (props) => {
               {...register("postalOrZip", { required: true })}
               type="text"
               placeholder="Postal Code or Zip"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("pin", { required: true })}
-              type="password"
-              placeholder="Pin"
             />
           </InputGroup>
         </Stack>
