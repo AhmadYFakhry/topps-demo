@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/:projectId/:assetId/:scanId">
+        <Route path="/:scanId">
           <Home />
         </Route>
       </Switch>

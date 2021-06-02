@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const ClaimOwnershipForm = ({ assetId, card }) => {
+const ClaimOwnershipForm = ({ scanId, card }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const {
@@ -30,7 +30,7 @@ const ClaimOwnershipForm = ({ assetId, card }) => {
     try {
       console.log(data);
       await axios.patch(
-        `https://openscreen.ngrok.io/asset/${assetId}/owner`,
+        `https://openscreen.ngrok.io/asset/${scanId}/owner`,
         addedConsentData
       );
       toast({

@@ -26,7 +26,7 @@ import Autocomplete, {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const TransferOwnership = ({ assetId, card }) => {
+const TransferOwnership = ({ scanId, card }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [loadingContacts, setLoadingContacts] = useState(true);
@@ -62,7 +62,7 @@ const TransferOwnership = ({ assetId, card }) => {
     try {
       console.log(data);
       const res = await axios.patch(
-        `https://openscreen.ngrok.io/asset/${assetId}/owner`,
+        `https://openscreen.ngrok.io/asset/${scanId}/owner`,
         addedConsentData
       );
       console.log(res);
