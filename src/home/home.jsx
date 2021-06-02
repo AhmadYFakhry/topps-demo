@@ -6,7 +6,7 @@ import { Center, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 
 const Home = () => {
-  const { assetId, scanId } = useParams();
+  const { scanId, assetId } = useParams();
   //   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
   const [owner, setOwner] = useState(null);
@@ -33,9 +33,9 @@ const Home = () => {
       ) : (
         <Center bgColor="gray.700" height="100%" padding="50px">
           {owner ? (
-            <TransferOwnership card={card} />
+            <TransferOwnership assetId={assetId} card={card} />
           ) : (
-            <ClaimOwnershipForm card={card} />
+            <ClaimOwnershipForm assetId={assetId} card={card} />
           )}
         </Center>
       )}

@@ -26,7 +26,7 @@ import Autocomplete, {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const TransferOwnership = (props) => {
+const TransferOwnership = ({ assetId, card }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [loadingContacts, setLoadingContacts] = useState(true);
@@ -57,22 +57,21 @@ const TransferOwnership = (props) => {
   };
 
   const onSubmit = async (data) => {
+    setLoading(true);
+    const addedConsentData = { ...data, consent: "yes" };
     try {
-      setLoading(true);
+      console.log(data);
+      const res = await axios.patch(
+        `https://openscreen.ngrok.io/asset/${assetId}/owner`,
+        addedConsentData
+      );
       toast({
-        title: "We've notified the current owner about the request",
-        description:
-          "You'll receive a text when your request has been processed!",
+        title: `Congratulations, You now own ${card.asset.name}!`,
+        description: "You'll receive a text with more information shortly",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
-      await axios.patch(
-        `https://openscreen.ngrok.io/asset/${props.assetId}`,
-        data
-      );
-      setLoading(false);
-      return;
     } catch (error) {
       toast({
         title: "Request failed",
@@ -81,10 +80,8 @@ const TransferOwnership = (props) => {
         duration: 3000,
         isClosable: true,
       });
-      setLoading(false);
-
-      return;
     }
+    setLoading(false);
   };
 
   return (
@@ -131,17 +128,17 @@ const TransferOwnership = (props) => {
         padding="10px"
       >
         <Box margin="10px">
-          {!props.card ? (
+          {!card ? (
             <Spinner color="white" />
           ) : (
             <>
-              <Heading color="white">{props.card?.asset.name}</Heading>
+              <Heading color="white">{card?.asset.name}</Heading>
               <Text marginLeft="10px" marginBottom="10px" color="white">
-                {props.card?.asset.description}
+                {card?.asset.description}
               </Text>
               <Image
                 padding="10px"
-                src={props.card?.asset.customAttributes?.imageUrl}
+                src={card?.asset.customAttributes?.imageUrl}
               />
               <Accordion maxW="500px" color="white" allowToggle>
                 <AccordionItem>
@@ -156,14 +153,13 @@ const TransferOwnership = (props) => {
                   <AccordionPanel pb={4}>
                     <Box marginBottom="20px">
                       <Text fontSize="20pt" fontWeight="bold" color="white">
-                        {props.card?.owner.firstName}{" "}
-                        {props.card?.owner.lastName}
+                        {card?.owner.firstName} {card?.owner.lastName}
                       </Text>
-                      <Text>{props.card?.owner.phoneNumber}</Text>
+                      <Text>{card?.owner.phoneNumber}</Text>
                     </Box>
                     <Text color="white">PAST OWNERS:</Text>
                     <OrderedList>
-                      {props.card?.owners.map((owner, i) => (
+                      {card?.owners.map((owner, i) => (
                         <ListItem color="white" key={i}>
                           {owner.firstName} {owner.lastName}
                         </ListItem>

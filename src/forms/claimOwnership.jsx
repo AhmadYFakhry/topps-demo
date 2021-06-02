@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const ClaimOwnershipForm = (props) => {
+const ClaimOwnershipForm = ({ assetId, card }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const {
@@ -24,15 +24,17 @@ const ClaimOwnershipForm = (props) => {
     formState: { errors },
   } = useForm();
 
-  const onClaim = async (data) => {
+  const onSubmit = async (data) => {
     setLoading(true);
+    const addedConsentData = { ...data, consent: "yes" };
     try {
-      await axios.patch(
-        `https://openscreen.ngrok.io/asset/${props.assetId}/owner`,
-        data
+      console.log(data);
+      const res = await axios.patch(
+        `https://openscreen.ngrok.io/asset/${assetId}/owner`,
+        addedConsentData
       );
       toast({
-        title: `Congratulations, You now own ${props.card.asset.name}!`,
+        title: `Congratulations, You now own ${card.asset.name}!`,
         description: "You'll receive a text with more information shortly",
         status: "success",
         duration: 3000,
@@ -63,24 +65,21 @@ const ClaimOwnershipForm = (props) => {
           Card Info
         </Heading>
         <Box margin="auto">
-          <Image
-            padding="10px"
-            src={props.card?.asset.customAttributes?.imageUrl}
-          />
+          <Image padding="10px" src={card?.asset.customAttributes?.imageUrl} />
 
-          {!props.card ? (
+          {!card ? (
             <Spinner color="white" />
           ) : (
             <Box padding="10px">
-              <Text color="white">{props.card?.asset.name}</Text>
-              <Text color="white">{props.card?.asset.description}</Text>
+              <Text color="white">{card?.asset.name}</Text>
+              <Text color="white">{card?.asset.description}</Text>
             </Box>
           )}
         </Box>
       </Box>
       <Heading color="gray.100">This card has not been claimed yet!</Heading>
 
-      <form onSubmit={handleSubmit(onClaim)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4}>
           <Flex>
             <InputGroup marginRight="10px">
@@ -161,17 +160,17 @@ const ClaimOwnershipForm = (props) => {
               placeholder="Postal Code or Zip"
             />
           </InputGroup>
+
+          <Button
+            type="submit"
+            isLoading={loading}
+            disabled={!errors}
+            color="gray.800"
+          >
+            Claim Ownership
+          </Button>
         </Stack>
       </form>
-
-      <Button
-        isLoading={loading}
-        disabled={!errors}
-        onClick={onClaim}
-        color="gray.800"
-      >
-        Claim Ownership
-      </Button>
     </Stack>
   );
 };
