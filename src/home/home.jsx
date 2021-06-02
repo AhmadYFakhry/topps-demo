@@ -6,14 +6,14 @@ import { Center, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 
 const Home = () => {
-  const { assetId } = useParams();
+  const { assetId, scanId } = useParams();
   //   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
   const [owner, setOwner] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`https://openscreen.ngrok.io/asset/${assetId}`)
+      .get(`https://openscreen.ngrok.io/asset/${scanId}`)
       .then((res) => {
         console.log(res);
         setCard(res.data);
@@ -22,7 +22,7 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [assetId]);
+  }, [scanId]);
 
   return (
     <>
