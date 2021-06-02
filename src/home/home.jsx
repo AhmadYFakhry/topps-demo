@@ -31,7 +31,7 @@ const Home = () => {
           <Spinner size="xl" color="white" />
         </Center>
       ) : (
-        <Center bgColor="gray.700" height="100vh">
+        <Center bgColor="gray.700" height="100%" padding="50px">
           {owner ? (
             <TransferOwnership card={card} />
           ) : (

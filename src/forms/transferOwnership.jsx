@@ -8,7 +8,15 @@ import {
   Heading,
   Button,
   Spinner,
+  Flex,
   useToast,
+  OrderedList,
+  ListItem,
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import Autocomplete, {
   createFilterOptions,
@@ -16,7 +24,6 @@ import Autocomplete, {
 
 import { useForm } from "react-hook-form";
 import axios from "axios";
-// import { TextField } from "@material-ui/core";
 
 const TransferOwnership = (props) => {
   const toast = useToast();
@@ -38,13 +45,10 @@ const TransferOwnership = (props) => {
 
   const queryContacts = async (e) => {
     try {
-      console.log(e.target.defaultValue);
       const res = await axios.get(`https://openscreen.ngrok.io/contacts`, {
         query: e.target.defaultValue,
       });
-      //   console.log(res);
       setOptions(res.data.contacts);
-      console.log(res.data.contacts);
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +87,7 @@ const TransferOwnership = (props) => {
   };
 
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} maxW="500px" w="500px">
       <Autocomplete
         id="combo-box-demo"
         onInputChange={queryContacts}
@@ -113,26 +117,56 @@ const TransferOwnership = (props) => {
                   {...params.inputProps}
                 />
               </InputGroup>
-
-              {/* <InputRightAddon children=".com" /> */}
             </div>
           );
         }}
       />
-      <Box marginBottom="20px">
-        <Heading color="white">Card Info</Heading>
+      <Heading color="white">Card Info</Heading>
+      <Box
+        border="2px"
+        borderColor="white"
+        borderRadius="5px"
+        marginBottom="20px"
+        padding="10px"
+      >
         <Box margin="10px">
           {!props.card ? (
             <Spinner color="white" />
           ) : (
             <>
-              <Text color="white">{props.card?.asset.name}</Text>
-              <Text color="white">{props.card?.asset.description}</Text>
-              <Text color="white">
-                CURRENT OWNER: {props.card?.owner.firstName}{" "}
-                {props.card?.owner.lastName} {props.card?.owner.phoneNumber}
+              <Heading color="white">{props.card?.asset.name}</Heading>
+              <Text marginLeft="10px" marginBottom="10px" color="white">
+                {props.card?.asset.description}
               </Text>
-              <Text color="white">PAST OWNERS:</Text>
+              <Accordion maxW="500px" color="white" allowToggle>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        Card Owner Information
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <Box marginBottom="20px">
+                      <Text fontSize="20pt" fontWeight="bold" color="white">
+                        {props.card?.owner.firstName}{" "}
+                        {props.card?.owner.lastName}
+                      </Text>
+                      <Text>{props.card?.owner.phoneNumber}</Text>
+                    </Box>
+                    <Text color="white">PAST OWNERS:</Text>
+                    <OrderedList>
+                      {props.card?.owners.map((owner, i) => (
+                        <ListItem color="white" key={i}>
+                          {owner.firstName} {owner.lastName}
+                        </ListItem>
+                      ))}
+                    </OrderedList>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
             </>
           )}
         </Box>
@@ -140,21 +174,23 @@ const TransferOwnership = (props) => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("firstName", { required: true })}
-              placeholder="First Name"
-            />
-          </InputGroup>
+          <Flex>
+            <InputGroup marginRight="10px">
+              <Input
+                bgColor="white"
+                {...register("firstName", { required: true })}
+                placeholder="First Name"
+              />
+            </InputGroup>
 
-          <InputGroup>
-            <Input
-              bgColor="white"
-              {...register("lastName", { required: true })}
-              placeholder="Last Name"
-            />
-          </InputGroup>
+            <InputGroup>
+              <Input
+                bgColor="white"
+                {...register("lastName", { required: true })}
+                placeholder="Last Name"
+              />
+            </InputGroup>
+          </Flex>
 
           <InputGroup>
             <Input
@@ -167,16 +203,61 @@ const TransferOwnership = (props) => {
           <InputGroup>
             <Input
               bgColor="white"
-              {...register("pin", { required: true })}
-              type="password"
-              placeholder="Pin"
+              {...register("emailAddress", { required: true })}
+              type="email"
+              placeholder="Email"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Input
+              bgColor="white"
+              {...register("address", { required: true })}
+              type="text"
+              placeholder="Address"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Input
+              bgColor="white"
+              {...register("city", { required: true })}
+              type="text"
+              placeholder="City"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Input
+              bgColor="white"
+              {...register("provinceOrState", { required: true })}
+              type="text"
+              placeholder="Province or State"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Input
+              bgColor="white"
+              {...register("country", { required: true })}
+              type="text"
+              placeholder="Country"
+            />
+          </InputGroup>
+
+          <InputGroup>
+            <Input
+              bgColor="white"
+              {...register("postalOrZip", { required: true })}
+              type="text"
+              placeholder="Postal Code or Zip"
             />
           </InputGroup>
         </Stack>
       </form>
 
       <Button
-        loading={loading.toString()}
+        isLoading={loading}
         disabled={!errors}
         type="submit"
         color="gray.800"
